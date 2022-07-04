@@ -345,5 +345,3 @@ tags:
   -
     name: Authorization
     description: "\n認証・トークン取得のためのAPI"
-
-https://localhost/docs/API%20list/spoint-connect-spec_openapi.json
