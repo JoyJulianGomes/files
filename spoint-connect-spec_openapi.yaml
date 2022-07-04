@@ -1,0 +1,349 @@
+openapi: 3.0.3
+info:
+  title: Sポイントコネクト仕様書
+  description: 'Sポイントコネクト仕様書 SDK'
+  version: 0.1.1
+servers:
+  -
+    url: 'https://connect.s-pt.jp'
+paths:
+  /api/point/update:
+    post:
+      summary: ポイント更新
+      description: ユーザーのポイントを更新
+      parameters:
+        -
+          in: header
+          name: Content-Type
+          description: ''
+          example: application/json
+          schema:
+            type: string
+        -
+          in: header
+          name: Accept
+          description: ''
+          example: application/json
+          schema:
+            type: string
+      responses:
+        200:
+          description: 'ユーザーポイントが正常に更新されました'
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  code: 0
+                  message: OK
+                  data: {  }
+                properties:
+                  code:
+                    type: integer
+                    description: レスポンスコード
+                    example: 0
+                  message:
+                    type: string
+                    description: レスポンスメッセージ
+                    example: OK
+                  data:
+                    type: object
+                    description: ポイントに関連するデータ
+                    example: {  }
+        400:
+          description: 'ユーザーポイントが正常に更新されませんでした'
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  code: 101
+                  message: 'invalid parameter error'
+                  error:
+                    token: エラーメッセージ
+                    point: エラーメッセージ
+                properties:
+                  code:
+                    type: integer
+                    description: レスポンスコード
+                    example: 101
+                  message:
+                    type: string
+                    description: レスポンスメッセージ
+                    example: 'invalid parameter error'
+                  error:
+                    type: object
+                    description: エラーデータ
+                    example:
+                      token: エラーメッセージ
+                      point: エラーメッセージ
+      tags:
+        - Point
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                token:
+                  type: string
+                  description: 's-ポイント トークン'
+                  example: xxxxx-xxxxx-xxxxx-xxxxx-xxxx
+                point:
+                  type: integer
+                  description: ご利用したいポイント
+                  example: 130
+              required:
+                - token
+                - point
+      security: []
+  /api/point/summary:
+    get:
+      summary: ポイントまとめ
+      description: ユーザーのポイントサマリーを表示する
+      parameters:
+        -
+          in: header
+          name: Content-Type
+          description: ''
+          example: application/json
+          schema:
+            type: string
+        -
+          in: header
+          name: Accept
+          description: ''
+          example: application/json
+          schema:
+            type: string
+      responses:
+        200:
+          description: 'ユーザーポイントの概要'
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  code: 0
+                  message: OK
+                  data: {  }
+                properties:
+                  code:
+                    type: integer
+                    description: レスポンスコード
+                    example: 0
+                  message:
+                    type: string
+                    description: レスポンスメッセージ
+                    example: OK
+                  data:
+                    type: object
+                    description: ポイントに関連するデータ
+                    example: {  }
+        400:
+          description: 'ユーザーポイントの概要の取得に失敗しました'
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  code: 101
+                  message: 'invalid parameter error'
+                  error:
+                    token: エラーメッセージ
+                properties:
+                  code:
+                    type: integer
+                    description: レスポンスコード
+                    example: 101
+                  message:
+                    type: string
+                    description: レスポンスメッセージ
+                    example: 'invalid parameter error'
+                  error:
+                    type: object
+                    description: エラーデータ
+                    example:
+                      token: エラーメッセージ
+      tags:
+        - Point
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                token:
+                  type: string
+                  description: 's-ポイント トークン'
+                  example: xxxxx-xxxxx-xxxxx-xxxxx-xxxx
+              required:
+                - token
+      security: []
+  /api/authorization/connect:
+    get:
+      summary: Sポイント接続許可リクエスト
+      description: カード情報を入力するページにリダイレクトされる。ユーザー認証が成功すると、ページはredirect_urlにリダイレクトされます。 指定されたredirect_urlは、APIコンシューマーの登録済みredirect_urlと一致する必要があります。一致しない場合、リクエストは失敗します。リダイレクト中、リダイレクト要求には認証コードが含まれます。 この認証コードは、api/authentication/tokenリクエストでs-pointトークンを取得するために必要です。
+      parameters:
+        -
+          in: header
+          name: Content-Type
+          description: ''
+          example: application/json
+          schema:
+            type: string
+        -
+          in: header
+          name: Accept
+          description: ''
+          example: application/json
+          schema:
+            type: string
+      responses:
+        200:
+          description: 'ユーザーはsポイント側で認証されました。'
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  code: 0
+                  message: OK
+                properties:
+                  code:
+                    type: integer
+                    description: レスポンスコード
+                    example: 0
+                  message:
+                    type: string
+                    description: レスポンスメッセージ
+                    example: OK
+        400:
+          description: 'ユーザーはsポイント側で認証されませんでした'
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  code: 101
+                  message: 'invalid parameter error'
+                properties:
+                  code:
+                    type: integer
+                    description: レスポンスコード
+                    example: 101
+                  message:
+                    type: string
+                    description: レスポンスメッセージ
+                    example: 'invalid parameter error'
+      tags:
+        - Authorization
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                redirect_url:
+                  type: string
+                  description: '認証後に戻るためのマーチェントウェブサイトのURL。指定されたredirect_urlは、APIコンシューマーの登録済みredirect_urlと一致する必要があります。一致しない場合、リクエストは失敗します。'
+                  example: 'https://marchentsite.co.jp'
+              required:
+                - redirect_url
+      security: []
+  /api/authorization/token:
+    get:
+      summary: 's-point トークンを取得する'
+      description: 'リダイレクトプロセス中に送信された認証トークンを使用して、sポイントトークンを取得します'
+      parameters:
+        -
+          in: header
+          name: Content-Type
+          description: ''
+          example: application/json
+          schema:
+            type: string
+        -
+          in: header
+          name: Accept
+          description: ''
+          example: application/json
+          schema:
+            type: string
+      responses:
+        200:
+          description: 's-pointトークンが正常に承認されました'
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  code: 0
+                  message: OK
+                  token: xxxx-xxxx-xxxx-xxxx
+                properties:
+                  code:
+                    type: integer
+                    description: レスポンスコード
+                    example: 0
+                  message:
+                    type: string
+                    description: レスポンスメッセージ
+                    example: OK
+                  token:
+                    type: string
+                    description: Sポイントトーケン
+                    example: xxxx-xxxx-xxxx-xxxx
+        400:
+          description: 's-pointトークンが正常に承認されませんでした'
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  code: 101
+                  message: 'invalid parameter error'
+                  error:
+                    authorization_token: エラーメッセージ
+                properties:
+                  code:
+                    type: integer
+                    description: レスポンスコード
+                    example: 101
+                  message:
+                    type: string
+                    description: レスポンスメッセージ
+                    example: 'invalid parameter error'
+                  error:
+                    type: object
+                    description: エラーデータ
+                    example:
+                      authorization_token: エラーメッセージ
+      tags:
+        - Authorization
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                authorization_token:
+                  type: string
+                  description: リダイレクトURLから取得した認可トークン
+                  example: xxxxx-xxxxx-xxxxx-xxxxx-xxxx
+              required:
+                - authorization_token
+      security: []
+tags:
+  -
+    name: Point
+    description: ''
+  -
+    name: Authorization
+    description: "\n認証・トークン取得のためのAPI"
+
+https://localhost/docs/API%20list/spoint-connect-spec_openapi.json
